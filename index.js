@@ -29,14 +29,17 @@ const schredule = {
        
         const time = `${date.getHours()}:${date.getMinutes()}`;
 
-
+        console.log(date.toLocaleTimeString()); // TODO console.log
         
         let obj = {
           'from': cities[city],
           'to': cities[departures],
           'number': this.getNumberOfTrain(),
           'day': dayOfWeek[date.getDay()],
-          'departure': this.getDayOfWeek(date),
+          'departure': {
+            'day':this.getDayOfWeek(date),
+            'time':date.toLocaleTimeString()
+          },
         };
 
         data.push(obj)
@@ -55,7 +58,6 @@ const schredule = {
 },
 
   getDayOfWeek(date) {
-    console.log(date); // TODO console.log
     if (date.getDate() === new Date().getDate()) {
       return 'Сьгодні'
     } else if (date.getDate() === new Date().getDate() + 1) {
@@ -63,6 +65,10 @@ const schredule = {
     } else {
       return dayOfWeek[date.getDay()]
     }
+  },
+
+  getTime(date) {
+
   },
   
   renderTable(data) {
@@ -74,7 +80,10 @@ const schredule = {
       <td>${item.from}</td>
       <td>${item.to}</td>
       <td>${item.day}</td>
-      <td>${item.departure}</td>
+      <td>
+        ${item.departure.day}
+        ${item.departure.time}
+</td>
       <td></td>
       <td></td>
     </tr>`
@@ -93,8 +102,6 @@ schredule.getNumberOfTrain();
 console.log(schredule.getNumberOfTrain());
 schredule.renderTable(data);
 
-// console.log(schredule.getStartDate());
-console.log(new Date(schredule.randomInteger(new Date().getTime(), new Date().getTime() + 604800000))); // TODO console.log
 
 
 
