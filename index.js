@@ -25,10 +25,9 @@ const schredule = {
         const date = new Date(this.randomInteger(new Date().getTime(), new Date().getTime() + 604800000));
 
         const day = date.getDay();
+        console.log(date.getDate()); // TODO console.log
        
         const time = `${date.getHours()}:${date.getMinutes()}`;
-        console.log(day, 'day'); // TODO console.log
-        console.log(dayOfWeek[day], 'day'); // TODO console.log
 
 
         
@@ -36,7 +35,8 @@ const schredule = {
           'from': cities[city],
           'to': cities[departures],
           'number': this.getNumberOfTrain(),
-          'day': dayOfWeek[day]
+          'day': dayOfWeek[date.getDay()],
+          'departure': this.getDayOfWeek(date),
         };
 
         data.push(obj)
@@ -48,18 +48,22 @@ const schredule = {
     return Math.floor(Math.random()*(999-100+1)+100) + Math.random().toString(36).substring(12, 15).toUpperCase();
   },
 
-  // getStartDate() {
-  //   function randomInteger(min, max) {
-  //     var rand = min - 0.5 + Math.random() * (max - min + 1)
-  //     rand = Math.round(rand);
-  //     return rand;
-  //   }
-  // },
   randomInteger(min, max) {
   var rand = min - 0.5 + Math.random() * (max - min + 1)
   rand = Math.round(rand);
   return rand;
 },
+
+  getDayOfWeek(date) {
+    console.log(date); // TODO console.log
+    if (date.getDate() === new Date().getDate()) {
+      return 'Сьгодні'
+    } else if (date.getDate() === new Date().getDate() + 1) {
+      return 'Завтра'
+    } else {
+      return dayOfWeek[date.getDay()]
+    }
+  },
   
   renderTable(data) {
     let tr;
@@ -70,7 +74,7 @@ const schredule = {
       <td>${item.from}</td>
       <td>${item.to}</td>
       <td>${item.day}</td>
-      <td></td>
+      <td>${item.departure}</td>
       <td></td>
       <td></td>
     </tr>`
