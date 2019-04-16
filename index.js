@@ -8,6 +8,8 @@ const distances = [
   [350,0,200,250,300]
 ];
 
+const dayOfWeek = [	"Неділя","Понеділок","Вівторок","Середа","Четвер","П'ятниця","Субота"];
+
 
 const data = [];
 
@@ -19,16 +21,23 @@ const schredule = {
         if (cities[city] == cities[departures]) {
           continue
         }
-        
 
+        const date = new Date(this.randomInteger(new Date().getTime(), new Date().getTime() + 604800000));
+
+        const day = date.getDay();
+       
+        const time = `${date.getHours()}:${date.getMinutes()}`;
+        console.log(day, 'day'); // TODO console.log
+        console.log(dayOfWeek[day], 'day'); // TODO console.log
+
+
+        
         let obj = {
           'from': cities[city],
           'to': cities[departures],
           'number': this.getNumberOfTrain(),
-          'arrive': this.getStartDate().getDay(),
-          
-
-        }
+          'day': dayOfWeek[day]
+        };
 
         data.push(obj)
       }
@@ -39,11 +48,18 @@ const schredule = {
     return Math.floor(Math.random()*(999-100+1)+100) + Math.random().toString(36).substring(12, 15).toUpperCase();
   },
 
-  getStartDate() {
-    const start = new Date(2019, 04, 15);
-    const end = new Date();
-    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-  },
+  // getStartDate() {
+  //   function randomInteger(min, max) {
+  //     var rand = min - 0.5 + Math.random() * (max - min + 1)
+  //     rand = Math.round(rand);
+  //     return rand;
+  //   }
+  // },
+  randomInteger(min, max) {
+  var rand = min - 0.5 + Math.random() * (max - min + 1)
+  rand = Math.round(rand);
+  return rand;
+},
   
   renderTable(data) {
     let tr;
@@ -53,7 +69,7 @@ const schredule = {
       <td>${item.number}</td>
       <td>${item.from}</td>
       <td>${item.to}</td>
-      <td></td>
+      <td>${item.day}</td>
       <td></td>
       <td></td>
       <td></td>
@@ -73,8 +89,8 @@ schredule.getNumberOfTrain();
 console.log(schredule.getNumberOfTrain());
 schredule.renderTable(data);
 
-console.log(schredule.getStartDate());
-
+// console.log(schredule.getStartDate());
+console.log(new Date(schredule.randomInteger(new Date().getTime(), new Date().getTime() + 604800000))); // TODO console.log
 
 
 
