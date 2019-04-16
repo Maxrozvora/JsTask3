@@ -26,8 +26,11 @@ const schredule = {
 
                 const day = date.getDay();
 
-                this.getDistance(city,departures);
-               console.log(this.getDistance(city,departures),cities[city], cities[departures]); // TODO console.log
+                const distance = this.getDistance(city,departures);
+
+                this.getArrivalTime(distance);
+
+
                 let obj = {
                     'from': cities[city],
                     'to': cities[departures],
@@ -64,12 +67,16 @@ const schredule = {
         }
     },
 
-    getArrivalTime(date) {
-        this.randomInteger(80, 120)
+    getArrivalTime(distance) {
+        const averageSpeed = this.randomInteger(80, 120);
+        console.log(distance, 'distance'); // TODO console.log
+        console.log(averageSpeed, 'averageSpeed'); // TODO console.log
+        console.log((distance / averageSpeed).toFixed(2), 'time'); // TODO console.log
+        return (distance / averageSpeed).toFixed(2);
     },
 
     getDistance(city,dapartures) {
-        return distances[city][dapartures]
+        return distances[city][dapartures];
     },
 
 
