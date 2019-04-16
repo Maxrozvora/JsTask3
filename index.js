@@ -2,10 +2,10 @@ const cities = ['Київ', 'Харків', 'Львів', 'Одеса', 'Дні�
 
 const distances = [
     [0, 200, 250, 300, 350],
-    [200, 250, 300, 350, 0],
-    [250, 300, 350, 0, 200],
-    [300, 350, 0, 200, 250],
-    [350, 0, 200, 250, 300]
+    [200, 0, 300, 350, 400],
+    [250, 300, 0, 400, 200],
+    [300, 350, 400, 0, 250],
+    [350, 400, 200, 250, 0]
 ];
 
 const dayOfWeek = ["Неділя", "Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця", "Субота"];
@@ -17,7 +17,7 @@ const data = [];
 const schredule = {
     getArriveCity() {
         for (let city in cities) {
-            for (departures in cities) {
+            for (let departures in cities) {
                 if (cities[city] == cities[departures]) {
                     continue
                 }
@@ -25,12 +25,9 @@ const schredule = {
                 const date = new Date(this.randomInteger(new Date().getTime(), new Date().getTime() + 604800000));
 
                 const day = date.getDay();
-                console.log(date.getDate()); // TODO console.log
 
-                const time = `${date.getHours()}:${date.getMinutes()}`;
-
-                console.log(date.toLocaleTimeString()); // TODO console.log
-
+                this.getDistance(city,departures);
+               console.log(this.getDistance(city,departures),cities[city], cities[departures]); // TODO console.log
                 let obj = {
                     'from': cities[city],
                     'to': cities[departures],
@@ -67,6 +64,14 @@ const schredule = {
         }
     },
 
+    getArrivalTime(date) {
+        this.randomInteger(80, 120)
+    },
+
+    getDistance(city,dapartures) {
+        return distances[city][dapartures]
+    },
+
 
     getTime(date) {
 
@@ -75,7 +80,6 @@ const schredule = {
     renderTable(data) {
         let tr;
         for (let item of data) {
-            console.log(item);
             const itemRow = `<tr>
       <td>${item.number}</td>
       <td>${item.from}</td>
@@ -103,6 +107,7 @@ schredule.getNumberOfTrain();
 console.log(schredule.getNumberOfTrain());
 schredule.renderTable(data);
 
+console.log(data); // TODO console.log
 
 
 
