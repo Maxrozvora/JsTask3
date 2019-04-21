@@ -65,11 +65,12 @@ const schredule = {
 
         const date = new Date(this.randomInteger(new Date().getTime(), new Date().getTime() + 604800000));
 
-        const day = date.getDay();
-
         const distance = this.getDistance(departureCity, arrivalCity);
 
-        const timeInTravel = this.getArrivalTime(distance);
+        const data = new Date(date);
+
+        const arriveTime = data.addHours(this.getTravelTime(distance));
+console.log(this.getArriveTime(arriveTime)); // TODO console.log
 
         let obj = {
             'from': departureCity,
@@ -81,8 +82,8 @@ const schredule = {
                 'time': date.toLocaleTimeString()
             },
             'arrive': {
-                'day': this.getDayOfWeek(date),
-                'time': null
+                'day': this.getDayOfWeek(arriveTime),
+                'time': this.getArriveTime(arriveTime)
             },
         };
 
@@ -110,18 +111,20 @@ const schredule = {
         }
     },
 
-    getArrivalTime(distance) {
+    getTravelTime(distance) {
         const averageSpeed = this.randomInteger(80, 120);
         const result = (distance / averageSpeed).toFixed(2) * 60;
         const hours = result / 60 | 0;
         const minutes = (result % 60).toFixed();
+        return [hours,parseInt(minutes)]
+    },
 
-        return new Date(0, 0, 0, hours, minutes);
-        // time;
+    getArriveTime(arriveTime) {
+        return `${arriveTime.getHours()} : ${arriveTime.getMinutes()}`
     },
 
     getDistance(city, dapartures) {
-        // return distances[city][dapartures];
+        console.log(city, dapartures); // TODO console.log
         return 100;
     },
 
@@ -141,8 +144,11 @@ const schredule = {
       <td>
         ${item.departure.day}
         ${item.departure.time}
-</td>
-      <td></td>
+        </td>
+      <td>
+        ${item.arrive.day}
+        ${item.arrive.time}
+        </td>
       <td></td>
     </tr>`
 
@@ -154,6 +160,12 @@ const schredule = {
     }
 };
 
+Date.prototype.addHours = function(time){
+    this.setHours(this.getHours()+time[0]);
+    this.setMinutes(this.getMinutes()+time[1]);
+    return this;
+};
+
 schredule.getArriveCity();
 schredule.getNumberOfTrain();
 
@@ -161,11 +173,7 @@ console.log(schredule.getNumberOfTrain());
 schredule.renderTable(data);
 
 
-Date.prototype.addHours = function(h,m){
-    this.setHours(this.getHours()+h);
-    this.setMinutes(this.getMinutes()+m);
-    return this;
-};
+
 
 
 
