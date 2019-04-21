@@ -15,36 +15,83 @@ const data = [];
 
 
 const schredule = {
-    getArriveCity() {
-        for (let city in cities) {
-            for (let departures in cities) {
-                if (cities[city] == cities[departures]) {
-                    continue
-                }
 
-                const date = new Date(this.randomInteger(new Date().getTime(), new Date().getTime() + 604800000));
+    getRandomiseArr(arr, n) {
 
-                const day = date.getDay();
+        const randIndx = [];
+        const randArr = [];
 
-                const distance = this.getDistance(city,departures);
+        while (randIndx.length < n) {
+            let random = this.randomInteger(0, arr.length - 1);
 
-                this.getArrivalTime(distance);
-
-
-                let obj = {
-                    'from': cities[city],
-                    'to': cities[departures],
-                    'number': this.getNumberOfTrain(),
-                    'day': dayOfWeek[date.getDay()],
-                    'departure': {
-                        'day': this.getDayOfWeek(date),
-                        'time': date.toLocaleTimeString()
-                    },
-                };
-
-                data.push(obj)
+            if (!randIndx.includes(random)) {
+                randIndx.push(random);
+                randArr.push(arr[random])
             }
         }
+        return randArr;
+    },
+
+    getRandomCity(cities) {
+        const random = this.randomInteger(0, cities.length - 1);
+        return cities[random];
+    },
+
+    getArriveCity() {
+        const n = prompt('ВВедіть кількість поїздів', 20);
+
+        const departureCities = this.getRandomiseArr(cities, cities.length);
+        const arrivalCities = this.getRandomiseArr(cities, cities.length);
+
+        const usedCities = [];
+
+        while (data.length < n && n <= 20) {
+            let departureCity = this.getRandomCity(cities);
+            let arrivalCity = this.getRandomCity(cities);
+
+            if (departureCity == arrivalCity) {
+                continue
+            }
+
+            if (!usedCities.includes(departureCity + arrivalCity)) {
+                usedCities.push(departureCity + arrivalCity);
+                data.push(this.createScreduleItem(departureCity, arrivalCity))
+            }
+        }
+
+    },
+
+    createScreduleItem(departureCity, arrivalCity) {
+
+        const date = new Date(this.randomInteger(new Date().getTime(), new Date().getTime() + 604800000));
+
+        const day = date.getDay();
+
+        const distance = this.getDistance(departureCity, arrivalCity);
+
+        const timeInTravel = this.getArrivalTime(distance);
+
+        console.log(date.getTime(), 'date'); // TODO console.log
+        console.log(new Date(timeInTravel)); // TODO console.log
+
+
+        let obj = {
+            'from': departureCity,
+            'to': arrivalCity,
+            'number': this.getNumberOfTrain(),
+            'day': dayOfWeek[date.getDay()],
+            'departure': {
+                'day': this.getDayOfWeek(date),
+                'time': date.toLocaleTimeString()
+            },
+            'arrive': {
+                'day': this.getDayOfWeek(date),
+                'time': null
+            },
+        };
+
+        return obj;
+
     },
 
     getNumberOfTrain() {
@@ -69,14 +116,17 @@ const schredule = {
 
     getArrivalTime(distance) {
         const averageSpeed = this.randomInteger(80, 120);
-        console.log(distance, 'distance'); // TODO console.log
-        console.log(averageSpeed, 'averageSpeed'); // TODO console.log
-        console.log((distance / averageSpeed).toFixed(2), 'time'); // TODO console.log
-        return (distance / averageSpeed).toFixed(2);
+        const result = (distance / averageSpeed).toFixed(2) * 60;
+        const hours = result / 60 | 0;
+        const minutes = (result % 60).toFixed();
+
+        return new Date(0, 0, 0, hours, minutes);
+        // time;
     },
 
-    getDistance(city,dapartures) {
-        return distances[city][dapartures];
+    getDistance(city, dapartures) {
+        // return distances[city][dapartures];
+        return 100;
     },
 
 
