@@ -40,9 +40,6 @@ const schredule = {
     getArriveCity() {
         const n = prompt('Введіть кількість поїздів', 20);
 
-        const departureCities = this.getRandomiseArr(cities, cities.length);
-        const arrivalCities = this.getRandomiseArr(cities, cities.length);
-
         const usedCities = [];
 
         while (data.length < n && n <= 20) {
@@ -69,10 +66,14 @@ const schredule = {
 
         const data = new Date(date);
 
-        const arriveTime = data.addHours(this.getTravelTime(distance));
-console.log(this.getArriveTime(arriveTime)); // TODO console.log
+        const averageSpeed = this.randomInteger(80, 120);
 
-        let obj = {
+        const arriveTime = data.addHours(this.getTravelTime(distance, averageSpeed));
+
+        const cost = (distance / averageSpeed * 40.251).toFixed(2);
+
+
+        return  {
             'from': departureCity,
             'to': arrivalCity,
             'number': this.getNumberOfTrain(),
@@ -85,10 +86,8 @@ console.log(this.getArriveTime(arriveTime)); // TODO console.log
                 'day': this.getDayOfWeek(arriveTime),
                 'time': this.getArriveTime(arriveTime)
             },
+            'cost': cost
         };
-
-        return obj;
-
     },
 
     getNumberOfTrain() {
@@ -96,9 +95,9 @@ console.log(this.getArriveTime(arriveTime)); // TODO console.log
     },
 
     randomInteger(min, max) {
-        var rand = min - 0.5 + Math.random() * (max - min + 1)
-        rand = Math.round(rand);
-        return rand;
+        const rand = min - 0.5 + Math.random() * (max - min + 1)
+        return  Math.round(rand);
+
     },
 
     getDayOfWeek(date) {
@@ -111,8 +110,7 @@ console.log(this.getArriveTime(arriveTime)); // TODO console.log
         }
     },
 
-    getTravelTime(distance) {
-        const averageSpeed = this.randomInteger(80, 120);
+    getTravelTime(distance, averageSpeed) {
         const result = (distance / averageSpeed).toFixed(2) * 60;
         const hours = result / 60 | 0;
         const minutes = (result % 60).toFixed();
@@ -128,10 +126,6 @@ console.log(this.getArriveTime(arriveTime)); // TODO console.log
         return 100;
     },
 
-
-    getTime(date) {
-
-    },
 
     renderTable(data) {
         let tr;
@@ -149,7 +143,7 @@ console.log(this.getArriveTime(arriveTime)); // TODO console.log
         ${item.arrive.day}
         ${item.arrive.time}
         </td>
-      <td></td>
+      <td>${item.cost}</td>
     </tr>`
 
             tr = tr + itemRow;
