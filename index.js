@@ -38,7 +38,7 @@ const schredule = {
     },
 
     getArriveCity() {
-        const n = prompt('ВВедіть кількість поїздів', 20);
+        const n = prompt('Введіть кількість поїздів', 20);
 
         const departureCities = this.getRandomiseArr(cities, cities.length);
         const arrivalCities = this.getRandomiseArr(cities, cities.length);
@@ -70,10 +70,6 @@ const schredule = {
         const distance = this.getDistance(departureCity, arrivalCity);
 
         const timeInTravel = this.getArrivalTime(distance);
-
-        console.log(date.getTime(), 'date'); // TODO console.log
-        console.log(new Date(timeInTravel)); // TODO console.log
-
 
         let obj = {
             'from': departureCity,
@@ -164,7 +160,13 @@ schredule.getNumberOfTrain();
 console.log(schredule.getNumberOfTrain());
 schredule.renderTable(data);
 
-console.log(data); // TODO console.log
+
+Date.prototype.addHours = function(h,m){
+    this.setHours(this.getHours()+h);
+    this.setMinutes(this.getMinutes()+m);
+    return this;
+};
+
 
 
 
