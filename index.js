@@ -16,25 +16,8 @@ const data = [];
 
 const schredule = {
 
-    getRandomiseArr(arr, n) {
-
-        const randIndx = [];
-        const randArr = [];
-
-        while (randIndx.length < n) {
-            let random = this.randomInteger(0, arr.length - 1);
-
-            if (!randIndx.includes(random)) {
-                randIndx.push(random);
-                randArr.push(arr[random])
-            }
-        }
-        return randArr;
-    },
-
-    getRandomCity(cities) {
-        const random = this.randomInteger(0, cities.length - 1);
-        return cities[random];
+    getRandomCityIndex(cities) {
+        return this.randomInteger(0, cities.length - 1);
     },
 
     getArriveCity() {
@@ -43,26 +26,34 @@ const schredule = {
         const usedCities = [];
 
         while (data.length < n && n <= 20) {
-            let departureCity = this.getRandomCity(cities);
-            let arrivalCity = this.getRandomCity(cities);
+            const randDepartureCity = this.getRandomCityIndex(cities);
 
-            if (departureCity == arrivalCity) {
+            const randArrivalCity = this.getRandomCityIndex(cities);
+
+            let departureCity = cities[randDepartureCity];
+
+            let arrivalCity = cities[randArrivalCity];
+
+
+            if (randDepartureCity == randArrivalCity) {
                 continue
             }
 
             if (!usedCities.includes(departureCity + arrivalCity)) {
                 usedCities.push(departureCity + arrivalCity);
-                data.push(this.createScreduleItem(departureCity, arrivalCity))
+                data.push(this.createScreduleItem(randDepartureCity, randArrivalCity))
             }
         }
 
     },
 
-    createScreduleItem(departureCity, arrivalCity) {
+    createScreduleItem(randDepartureCity, randArrivalCity) {
 
         const date = new Date(this.randomInteger(new Date().getTime(), new Date().getTime() + 604800000));
 
-        const distance = this.getDistance(departureCity, arrivalCity);
+        const distance = this.getDistance(randDepartureCity, randArrivalCity);
+        
+        console.log(distance); // TODO console.log
 
         const data = new Date(date);
 
@@ -74,8 +65,8 @@ const schredule = {
 
 
         return  {
-            'from': departureCity,
-            'to': arrivalCity,
+            'from': cities[randDepartureCity],
+            'to': cities[randArrivalCity],
             'number': this.getNumberOfTrain(),
             'day': dayOfWeek[date.getDay()],
             'departure': {
@@ -121,9 +112,8 @@ const schredule = {
         return `${arriveTime.getHours()} : ${arriveTime.getMinutes()}`
     },
 
-    getDistance(city, dapartures) {
-        console.log(city, dapartures); // TODO console.log
-        return 100;
+    getDistance(from, to) {
+        return distances[from][to];        
     },
 
 
