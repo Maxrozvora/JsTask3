@@ -52,8 +52,6 @@ const schredule = {
         const date = new Date(this.randomInteger(new Date().getTime(), new Date().getTime() + 604800000));
 
         const distance = this.getDistance(randDepartureCity, randArrivalCity);
-        
-        console.log(distance); // TODO console.log
 
         const data = new Date(date);
 
@@ -71,11 +69,11 @@ const schredule = {
             'day': dayOfWeek[date.getDay()],
             'departure': {
                 'day': this.getDayOfWeek(date),
-                'time': date.toLocaleTimeString()
+                'time': this.getTimeFormat(date)
             },
             'arrive': {
                 'day': this.getDayOfWeek(arriveTime),
-                'time': this.getArriveTime(arriveTime)
+                'time': this.getTimeFormat(arriveTime)
             },
             'cost': cost
         };
@@ -86,7 +84,7 @@ const schredule = {
     },
 
     randomInteger(min, max) {
-        const rand = min - 0.5 + Math.random() * (max - min + 1)
+        const rand = min - 0.5 + Math.random() * (max - min + 1);
         return  Math.round(rand);
 
     },
@@ -108,8 +106,16 @@ const schredule = {
         return [hours,parseInt(minutes)]
     },
 
-    getArriveTime(arriveTime) {
-        return `${arriveTime.getHours()} : ${arriveTime.getMinutes()}`
+    getTimeFormat(time) {
+        let hours = time.getHours();
+        let minutes = time.getMinutes();
+        if(minutes < 9) {
+            minutes = `0${time.getMinutes()}`
+        }
+        if(hours < 9) {
+            hours = `0${time.getHours()}`
+        }
+        return `${hours} : ${minutes}`
     },
 
     getDistance(from, to) {
@@ -126,12 +132,12 @@ const schredule = {
       <td>${item.to}</td>
       <td>${item.day}</td>
       <td>
-        ${item.departure.day}
-        ${item.departure.time}
+        <div>${item.departure.day}</div>
+        <div>${item.departure.time}</div>
         </td>
       <td>
-        ${item.arrive.day}
-        ${item.arrive.time}
+        <div>${item.arrive.day}</div>
+        <div>${item.arrive.time}</div>
         </td>
       <td>${item.cost}</td>
     </tr>`
