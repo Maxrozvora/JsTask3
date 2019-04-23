@@ -124,7 +124,7 @@ const schredule = {
 
 
     renderTable(data) {
-        let tr;
+        let tr = '';
         for (let item of data) {
             const itemRow = `<tr>
       <td>${item.number}</td>
@@ -159,7 +159,6 @@ Date.prototype.addHours = function(time){
 schredule.getArriveCity();
 schredule.getNumberOfTrain();
 
-console.log(schredule.getNumberOfTrain());
 schredule.renderTable(data);
 
 
