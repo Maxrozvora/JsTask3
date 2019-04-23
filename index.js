@@ -80,7 +80,8 @@ const schredule = {
     },
 
     getNumberOfTrain() {
-        return Math.floor(Math.random() * (999 - 100 + 1) + 100) + Math.random().toString(36).substring(12, 15).toUpperCase();
+        const letter = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+        return this.randomInteger(100, 999) + letter[this.randomInteger(0, letter.length -1)];
     },
 
     randomInteger(min, max) {
@@ -109,10 +110,10 @@ const schredule = {
     getTimeFormat(time) {
         let hours = time.getHours();
         let minutes = time.getMinutes();
-        if(minutes < 9) {
+        if(minutes <= 9) {
             minutes = `0${time.getMinutes()}`
         }
-        if(hours < 9) {
+        if(hours <= 9) {
             hours = `0${time.getHours()}`
         }
         return `${hours} : ${minutes}`
