@@ -23,25 +23,29 @@ const schredule = {
     getArriveCity() {
         const n = prompt('Введіть кількість поїздів', 20);
 
-        const usedCities = [];
+        if ( n > 20 || n <= 0) {
+            alert('Ви ввели неправильне значення')
+        } else {
+            const usedCities = [];
 
-        while (data.length < n && n <= 20) {
-            const randDepartureCity = this.getRandomCityIndex(cities);
+            while (data.length < n && n <= 20) {
+                const randDepartureCity = this.getRandomCityIndex(cities);
 
-            const randArrivalCity = this.getRandomCityIndex(cities);
+                const randArrivalCity = this.getRandomCityIndex(cities);
 
-            let departureCity = cities[randDepartureCity];
+                let departureCity = cities[randDepartureCity];
 
-            let arrivalCity = cities[randArrivalCity];
+                let arrivalCity = cities[randArrivalCity];
 
 
-            if (randDepartureCity == randArrivalCity) {
-                continue
-            }
+                if (randDepartureCity == randArrivalCity) {
+                    continue
+                }
 
-            if (!usedCities.includes(departureCity + arrivalCity)) {
-                usedCities.push(departureCity + arrivalCity);
-                data.push(this.createScreduleItem(randDepartureCity, randArrivalCity))
+                if (!usedCities.includes(departureCity + arrivalCity)) {
+                    usedCities.push(departureCity + arrivalCity);
+                    data.push(this.createScreduleItem(randDepartureCity, randArrivalCity))
+                }
             }
         }
 
@@ -61,16 +65,17 @@ const schredule = {
 
         const cost = (distance / averageSpeed * 40.251).toFixed(2);
 
-
-        return  {
+        return {
             'from': cities[randDepartureCity],
             'to': cities[randArrivalCity],
             'number': this.getNumberOfTrain(),
             'day': dayOfWeek[date.getDay()],
             'departure': {
+                'left': new Date(date).getTime(),
                 'day': this.getDayOfWeek(date),
                 'time': this.getTimeFormat(date)
             },
+            'id': this.generateId(),
             'arrive': {
                 'day': this.getDayOfWeek(arriveTime),
                 'time': this.getTimeFormat(arriveTime)
@@ -80,13 +85,13 @@ const schredule = {
     },
 
     getNumberOfTrain() {
-        const letter = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
-        return this.randomInteger(100, 999) + letter[this.randomInteger(0, letter.length -1)];
+        const letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        return this.randomInteger(100, 999) + letter[this.randomInteger(0, letter.length - 1)];
     },
 
     randomInteger(min, max) {
         const rand = min - 0.5 + Math.random() * (max - min + 1);
-        return  Math.round(rand);
+        return Math.round(rand);
 
     },
 
@@ -104,23 +109,23 @@ const schredule = {
         const result = (distance / averageSpeed).toFixed(2) * 60;
         const hours = result / 60 | 0;
         const minutes = (result % 60).toFixed();
-        return [hours,parseInt(minutes)]
+        return [hours, parseInt(minutes)]
     },
 
     getTimeFormat(time) {
         let hours = time.getHours();
         let minutes = time.getMinutes();
-        if(minutes <= 9) {
+        if (minutes <= 9) {
             minutes = `0${time.getMinutes()}`
         }
-        if(hours <= 9) {
+        if (hours <= 9) {
             hours = `0${time.getHours()}`
         }
         return `${hours} : ${minutes}`
     },
 
     getDistance(from, to) {
-        return distances[from][to];        
+        return distances[from][to];
     },
 
 
@@ -132,6 +137,7 @@ const schredule = {
       <td>${item.from}</td>
       <td>${item.to}</td>
       <td>${item.day}</td>
+      <td class="timer" data-timer="${item.departure.left}">${item.departure.left}</td>
       <td>
         <div>${item.departure.day}</div>
         <div>${item.departure.time}</div>
@@ -148,12 +154,58 @@ const schredule = {
         }
 
         document.querySelector('tbody').innerHTML = tr
+    },
+
+    generateId() {
+        return Math.random().toString(36).substr(2, 16);
+    },
+
+    timer(timeLeft, item) {
+        const target_date = parseInt(timeLeft);
+        let days, hours, minutes, seconds; // переменные для единиц времени
+
+        // const countdown = document.getElementsByClassName("timeLeft"); // получить элемент тега
+
+        getCountdown();
+
+        setInterval(function () { getCountdown(); }, 1000);
+
+        function getCountdown(){  
+
+            let current_date = new Date().getTime();
+            let seconds_left = (target_date - current_date) / 1000;
+
+            days = pad( parseInt(seconds_left / 86400) );
+            seconds_left = seconds_left % 86400;
+
+            hours = pad( parseInt(seconds_left / 3600) );
+            seconds_left = seconds_left % 3600;
+
+            minutes = pad( parseInt(seconds_left / 60) );
+            seconds = pad( parseInt( seconds_left % 60 ) );
+
+            // console.log(countdown); // TODO console.log
+            // строка обратного отсчета  + значение тега
+            item.innerHTML = `<span>  ${days} дня </span><span>${hours}:</span> <span> ${minutes}:</span> <span>${seconds}</span>`;
+        }
+
+        function pad(n) {
+            return (n < 10 ? '0' : '') + n;
+        }
+    },
+
+    startTimer() {
+        const timerEl = document.querySelectorAll('.timer');
+        timerEl.forEach(item => {
+            const timeLeft = item.getAttribute('data-timer');
+             this.timer(timeLeft, item);
+        })
     }
 };
 
-Date.prototype.addHours = function(time){
-    this.setHours(this.getHours()+time[0]);
-    this.setMinutes(this.getMinutes()+time[1]);
+Date.prototype.addHours = function (time) {
+    this.setHours(this.getHours() + time[0]);
+    this.setMinutes(this.getMinutes() + time[1]);
     return this;
 };
 
@@ -161,6 +213,7 @@ schredule.getArriveCity();
 schredule.getNumberOfTrain();
 
 schredule.renderTable(data);
+schredule.startTimer();
 
 
 
