@@ -23,7 +23,7 @@ const schredule = {
     getArriveCity() {
         const n = prompt('Введіть кількість поїздів', 20);
 
-        if ( n > 20 || n <= 0) {
+        if ( n > 20 || n <= 0 || isNaN(n)) {
             alert('Ви ввели неправильне значення')
         } else {
             const usedCities = [];
