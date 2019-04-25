@@ -186,7 +186,7 @@ const schredule = {
 
             // console.log(countdown); // TODO console.log
             // строка обратного отсчета  + значение тега
-            item.innerHTML = `<span>  ${days} дня </span><span>${hours}:</span> <span> ${minutes}:</span> <span>${seconds}</span>`;
+            item.innerHTML = `<span>  ${days} дн. </span><span>${hours}:</span> <span> ${minutes}:</span> <span>${seconds}</span>`;
         }
 
         function pad(n) {
@@ -200,6 +200,13 @@ const schredule = {
             const timeLeft = item.getAttribute('data-timer');
              this.timer(timeLeft, item);
         })
+    },
+
+    init() {
+        this.getArriveCity();
+        this.getNumberOfTrain();
+        this.renderTable(data);
+        this.startTimer();
     }
 };
 
@@ -209,11 +216,7 @@ Date.prototype.addHours = function (time) {
     return this;
 };
 
-schredule.getArriveCity();
-schredule.getNumberOfTrain();
-
-schredule.renderTable(data);
-schredule.startTimer();
+schredule.init();
 
 
 
