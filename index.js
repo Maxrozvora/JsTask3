@@ -75,7 +75,6 @@ const schredule = {
                 'day': this.getDayOfWeek(date),
                 'time': this.getTimeFormat(date)
             },
-            'id': this.generateId(),
             'arrive': {
                 'day': this.getDayOfWeek(arriveTime),
                 'time': this.getTimeFormat(arriveTime)
@@ -156,15 +155,9 @@ const schredule = {
         document.querySelector('tbody').innerHTML = tr
     },
 
-    generateId() {
-        return Math.random().toString(36).substr(2, 16);
-    },
-
     timer(timeLeft, item) {
         const target_date = parseInt(timeLeft);
-        let days, hours, minutes, seconds; // переменные для единиц времени
-
-        // const countdown = document.getElementsByClassName("timeLeft"); // получить элемент тега
+        let days, hours, minutes, seconds;
 
         getCountdown();
 
@@ -184,8 +177,6 @@ const schredule = {
             minutes = pad( parseInt(seconds_left / 60) );
             seconds = pad( parseInt( seconds_left % 60 ) );
 
-            // console.log(countdown); // TODO console.log
-            // строка обратного отсчета  + значение тега
             item.innerHTML = `<span>  ${days} дн. </span><span>${hours}:</span> <span> ${minutes}:</span> <span>${seconds}</span>`;
         }
 
@@ -219,8 +210,6 @@ Date.prototype.addHours = function (time) {
 function saveTrain(data, filename){
     data = JSON.stringify(data, undefined, 4);
     let blob = new Blob([data], {type: 'text/json'});
-    console.log(data); // TODO console.log
-    let div = document.createElement('div');
     let a = document.querySelector('.btn');
     a.download = filename;
     a.href = window.URL.createObjectURL(blob)
