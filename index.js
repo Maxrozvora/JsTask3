@@ -216,7 +216,21 @@ Date.prototype.addHours = function (time) {
     return this;
 };
 
+function saveTrain(data, filename){
+    data = JSON.stringify(data, undefined, 4);
+    let blob = new Blob([data], {type: 'text/json'});
+    console.log(data); // TODO console.log
+    let div = document.createElement('div');
+    let a = document.querySelector('.btn');
+    a.download = filename;
+    a.href = window.URL.createObjectURL(blob)
+
+}
+
 schredule.init();
+
+saveTrain(data, 'test.json');
+
 
 
 
