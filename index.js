@@ -14,7 +14,7 @@ const dayOfWeek = ["Неділя", "Понеділок", "Вівторок", "С
 const data = [];
 
 
-const schredule = {
+const schedule = {
 
     getRandomCityIndex(cities) {
         return this.randomInteger(0, cities.length - 1);
@@ -44,14 +44,14 @@ const schredule = {
 
                 if (!usedCities.includes(departureCity + arrivalCity)) {
                     usedCities.push(departureCity + arrivalCity);
-                    data.push(this.createScreduleItem(randDepartureCity, randArrivalCity))
+                    data.push(this.createScheduleItem(randDepartureCity, randArrivalCity))
                 }
             }
         }
 
     },
 
-    createScreduleItem(randDepartureCity, randArrivalCity) {
+    createScheduleItem(randDepartureCity, randArrivalCity) {
 
         const date = new Date(this.randomInteger(new Date().getTime(), new Date().getTime() + 604800000));
 
@@ -216,7 +216,7 @@ function saveTrain(data, filename){
 
 }
 
-schredule.init();
+schedule.init();
 
 saveTrain(data, 'test.json');
 
